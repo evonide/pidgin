@@ -1049,7 +1049,12 @@ purple_proxy_get_proxy_resolver(PurpleAccount *account)
 	gchar *proxy;
 	GProxyResolver *resolver;
 
+	purple_debug_info("proxy", "** proxy type for account is %d",
+			purple_proxy_info_get_proxy_type(info));
+
 	if (purple_proxy_info_get_proxy_type(info) == PURPLE_PROXY_NONE) {
+		purple_debug_info("proxy", "** using empty simple resolver.");
+
 		/* Return an empty simple resolver, which is the same as direct
 		 * connection. */
 		return g_simple_proxy_resolver_new(NULL, NULL);
@@ -1111,6 +1116,8 @@ purple_proxy_get_proxy_resolver(PurpleAccount *account)
 			purple_proxy_info_get_host(info),
 			purple_proxy_info_get_port(info));
 	g_free(auth);
+
+	purple_debug_info("proxy", "** using simple proxy resolver: %s", proxy);
 
 	resolver = g_simple_proxy_resolver_new(proxy, NULL);
 	g_free(proxy);
